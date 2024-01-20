@@ -1,6 +1,6 @@
 
 const spreadsheetID = '1dDoSnoE6p2ewQyvTqO5l7X7GnqPYncXKTi1Y5J6Lfic';
-const urlpagina = '&tq&gid=1212912229';
+const urlpagina = '&tq&gid=0';
 const url = `https://docs.google.com/spreadsheets/d/${spreadsheetID}/gviz/tq?tqx=out:json${urlpagina}`;
 
 
@@ -30,8 +30,6 @@ function pesquisar(palavra, cod){
             let filtro = tabela.map((k) =>{
                 return k['c'];
             });
-
-            console.log(filtro)
             
             let filtro2 = filtro.filter((k) =>{
                 let r1 = -1;
@@ -45,8 +43,6 @@ function pesquisar(palavra, cod){
             
                 return ((r1 > -1) || (r2 > -1));
             });
-
-           console.log(JSON.stringify(filtro2));
 
            criarTabelaHTML(filtro2);
       
