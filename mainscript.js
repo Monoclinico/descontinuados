@@ -3,6 +3,9 @@ const spreadsheetID = '1dDoSnoE6p2ewQyvTqO5l7X7GnqPYncXKTi1Y5J6Lfic';
 const urlpagina = '&tq&gid=0';
 const url = `https://docs.google.com/spreadsheets/d/${spreadsheetID}/gviz/tq?tqx=out:json${urlpagina}`;
 
+const USUARIO = "avon";
+const SENHA = "avon@2024";
+const ATIVADO = true;
 
 async function obterDados(){
 
@@ -35,10 +38,10 @@ function pesquisar(palavra, cod){
                 let r1 = -1;
                 let r2 = -1;
                 if(palavra.trim().length > 0 ){
-                    r1 = k['0'].v.toString().toLowerCase().search(palavra);
+                    r1 = k['0'].v.toString().toLowerCase().search(palavra.toLowerCase());
                 }
                 if(cod.trim().length > 0 ){
-                    r2 = k['1'].v.toString().toLowerCase().search(cod);
+                    r2 = k['1'].v.toString().toLowerCase().search(cod.toLowerCase());
                 }
             
                 return ((r1 > -1) || (r2 > -1));
@@ -58,6 +61,7 @@ function criarTabelaHTML(dados) {
     if (dados.length > 0){
         // Cria um elemento de tabela
         let tabela = document.createElement("table");
+        tabela.setAttribute("id","tabela");
 
         // Loop através dos dados
         dados.forEach(function (linha) {
@@ -79,13 +83,59 @@ function criarTabelaHTML(dados) {
     
 }
 
+function login() {
 
+    let bloco_login = document.getElementById("id_bloco_login");
+    let input_usuario = document.getElementById("usuario");
+    let input_senha = document.getElementById("senha");
+    let blocoPesquisa = document.getElementById("id_bloco_pesquisa");
 
-let pesquisaCodigo = document.getElementById("codigo");
-let pesquisaNome = document.getElementById("produto");
-let pesquisaBotao = document.getElementById("pesquisa");
+    let u = sessionStorage.getItem("usuario");
+    let s = sessionStorage.getItem("senha");
 
-pesquisaBotao.addEventListener("click", function () {
-    pesquisar(pesquisaCodigo.value.toString(),pesquisaNome.value.toString());
-})
+    if((u == USUARIO) && (s == SENHA)){
+        input_usuario.value =  sessionStorage.getItem("usuario");
+        input_senha.value = sessionStorage.getItem("senha");
+    }
+    
+    if ((SENHA == input_senha.value.toString()) && (USUARIO == input_usuario.value.toString())){
+        bloco_login.style = "display: none;";
+        blocoPesquisa.style = "display: block;";
 
+        sessionStorage.setItem("usuario", USUARIO);
+        sessionStorage.setItem("senha", SENHA);
+        inserirPesquisa();
+
+    }else {
+       let acesso = document.getElementById("acesso");
+       acesso.style = " display: block;";
+    }
+    
+
+}
+
+function inserirPesquisa() {
+
+    let pesquisaCodigo = document.getElementById("codigo");
+    let pesquisaNome = document.getElementById("produto");
+    let pesquisaBotao = document.getElementById("pesquisa");
+    pesquisaBotao.addEventListener("click", function () {
+        pesquisar(pesquisaCodigo.value.toString(),pesquisaNome.value.toString());
+    })
+}
+
+let botao_logar = document.getElementById("btn_logar");
+
+if (ATIVADO){
+    botao_logar.addEventListener("click",login);
+    let u = sessionStorage.getItem("usuario");
+    let s = sessionStorage.getItem("senha");
+
+    if((u == USUARIO) && (s == SENHA)){
+        login();
+    }
+
+}else{
+    document.getElementById("fora").style.display = "block";
+
+}
