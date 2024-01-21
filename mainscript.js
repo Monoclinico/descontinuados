@@ -44,6 +44,7 @@ function pesquisar(palavra, cod){
                 return ((r1 > -1) || (r2 > -1));
             });
 
+    
            criarTabelaHTML(filtro2);
       
             
@@ -51,26 +52,31 @@ function pesquisar(palavra, cod){
     )
 }
 function criarTabelaHTML(dados) {
-    // Cria um elemento de tabela
-    let tabela = document.createElement("table");
 
-    // Loop através dos dados
-    dados.forEach(function (linha) {
-        // Cria uma linha (tr) para cada subarray
-        var linhaTabela = tabela.insertRow();
-
-        // Loop através dos elementos de cada subarray
-        linha.forEach(function (celula) {
-            // Cria uma célula (td) para cada elemento e adiciona à linha
-            var celulaTabela = linhaTabela.insertCell();
-            celulaTabela.textContent = celula.v;
-        });
-    });
-
-    // Adiciona a tabela ao corpo do documento
     let divResultados = document.getElementById("resultados");
     divResultados.textContent = '';
-    divResultados.appendChild(tabela);
+    if (dados.length > 0){
+        // Cria um elemento de tabela
+        let tabela = document.createElement("table");
+
+        // Loop através dos dados
+        dados.forEach(function (linha) {
+            // Cria uma linha (tr) para cada subarray
+            var linhaTabela = tabela.insertRow();
+
+            // Loop através dos elementos de cada subarray
+            linha.forEach(function (celula) {
+                // Cria uma célula (td) para cada elemento e adiciona à linha
+                var celulaTabela = linhaTabela.insertCell();
+                celulaTabela.textContent = celula.v;
+            });
+        });
+        
+        divResultados.appendChild(tabela);
+    }else{
+        divResultados.textContent = "Nenhum produto encontrado";
+    }
+    
 }
 
 
