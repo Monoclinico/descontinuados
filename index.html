@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" type="image/x-icon" href="./imagens/lupa.ico">
-    <title>Produtos Descontinuados</title>
+    <title>Busca Descontinuados</title>
 
     <style>
         body {
@@ -118,6 +118,10 @@
             margin: 5px 5px;
         }
 
+        #atualizacao {
+            font-size: 0.9em;
+        }
+
     </style>
 
 </head>
@@ -134,12 +138,13 @@
 
     <div id="id_bloco_pesquisa" > 
  
-        <h1 class="centrar">Pesquisa de Produto Descontinuados</h1>
+        <h2 class="centrar">Pesquisa de Produto Descontinuados</h2>
+        <p id="atualizacao" >Base de dados atualizada em 23/01/2024</p>
 
-        <label  for="codigo">Código:</label><br>
+        <label  for="codigo">Pesquisar com código do produto:</label><br>
         <input class="centrar" type="text" id="codigo" name="codigo"><br>
 
-        <label  for="produto">Produto:</label><br>
+        <label  for="produto">Pesquisar com nome do produto:</label><br>
         <input class="centrar" type="text" id="produto" name="produto">
 
         <button class="centrar" id="pesquisa">
