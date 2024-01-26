@@ -58,11 +58,11 @@
         }
         
         #tabela tr:nth-child(odd) {
-            background: #ffffff;
+            background: #f1fcff;
         }
 
         #tabela tr:nth-child(even) {
-            background: #f7ddff;
+            background: #fff9ce;
         }
 
         .bloco_login input {
@@ -118,9 +118,54 @@
             margin: 5px 5px;
         }
 
-        #atualizacao {
-            font-size: 0.9em;
+        #data_atualizacao {
+            color: #011469;
+            font-weight: 900;
         }
+
+
+        #carregando {
+            display: none;
+            padding: 1px 20px;
+        }
+
+
+        #label_acento {
+            display: inline;
+        }
+
+        #acento {
+            display: inline;
+        }
+
+        .loader {
+            width: 48px;
+            height: 48px;
+            display: inline-block;
+            position: relative;
+            border: 3px solid;
+            border-color:#de3500 #0000 #fff #0000;
+            border-radius: 50%;
+            box-sizing: border-box;
+            animation: 1s rotate linear infinite;
+        }
+        .loader:before , .loader:after{
+            content: '';
+            top: 0;
+            left: 0;
+            position: absolute;
+            border: 10px solid transparent;
+            border-bottom-color:#fff;
+            transform: translate(-10px, 19px) rotate(-35deg);
+        }
+        .loader:after {
+            border-color: #de3500 #0000 #0000 #0000 ;
+            transform: translate(32px, 3px) rotate(-35deg);
+        }
+        @keyframes rotate {
+            100%{    transform: rotate(360deg)}
+        }
+        
 
     </style>
 
@@ -139,18 +184,24 @@
     <div id="id_bloco_pesquisa" > 
  
         <h2 class="centrar">Pesquisa de Produtos Descontinuados</h2>
-        <p id="atualizacao" >Base de dados atualizada em 23/01/2024</p>
+        <p id="atualizacao" >Base de dados atualizada em <span id="data_atualizacao">---</span></p>
 
         <label  for="codigo">Pesquisar com código do produto:</label><br>
         <input class="centrar" type="text" id="codigo" name="codigo"><br>
 
         <label  for="produto">Pesquisar com nome do produto:</label><br>
+        <div>
+            <p id="label_acento">Remover acentos</p>
+            <input type="checkbox" id="acento" name="acento">
+        </div>
         <input class="centrar" type="text" id="produto" name="produto">
-
+        
         <button class="centrar" id="pesquisa">
             Pesquisar
         </button>
-
+        <div id="carregando"> 
+            <span class="loader"></span>
+        </div>
         <div id="resultados">
 
         </div>
@@ -160,13 +211,3 @@
 <script src="./mainscript.js">
 </script>
 </html>
-
-
-
-
-
-
-
-
-
-
