@@ -1,15 +1,18 @@
 
 const spreadsheetID = '1dDoSnoE6p2ewQyvTqO5l7X7GnqPYncXKTi1Y5J6Lfic';
-const urlpagina = '&tq&gid=0';
-const url = `https://docs.google.com/spreadsheets/d/${spreadsheetID}/gviz/tq?tqx=out:json${urlpagina}`;
+const dados = '&tq&gid=0';
+const metadados = '&tq&gid=1424583042';
+const urldados = `https://docs.google.com/spreadsheets/d/${spreadsheetID}/gviz/tq?tqx=out:json${dados}`;
+
+const urlmeta = `https://docs.google.com/spreadsheets/d/${spreadsheetID}/gviz/tq?tqx=out:json${metadados}`;
 
 const USUARIO = "avon";
 const SENHA = "avon@2024";
 const ATIVADO = true;
 
-async function obterDados(){
+async function obterDados(link){
 
-    let data = await fetch(url);
+    let data = await fetch(link);
     let texto1 = await data.text()
     let texto2 = texto1.replaceAll(
         "/*O_o*/\ngoogle.visualization.Query.setResponse(",
@@ -25,9 +28,22 @@ async function obterDados(){
 
 
 
-function pesquisar(palavra, cod){
-    obterDados().then(
+function pesquisar(pesquisaNome, pesquisaCodigo){
+    let divResultados = document.getElementById("resultados");
+    let carregando = document.getElementById("carregando");
+    let acentos = document.getElementById("acento");
+    divResultados.textContent = '';
+    carregando.style = "display: block;";
+
+    obterDados(urldados).then(
         value => {
+
+            let n1 = pesquisaNome.toString().toLowerCase().trim()
+            let nome = n1;
+            if (acentos.checked){
+                nome = n1.normalize('NFD').replace(/[\u0300-\u036f]/g, "");
+            }
+
             let tabela = value.table.rows;
 
             let filtro = tabela.map((k) =>{
@@ -37,25 +53,30 @@ function pesquisar(palavra, cod){
             let filtro2 = filtro.filter((k) =>{
                 let r1 = -1;
                 let r2 = -1;
-                if(palavra.trim().length > 0 ){
-                    r1 = k['0'].v.toString().toLowerCase().search(palavra.toLowerCase());
+                if(pesquisaCodigo.trim().length > 0 ){
+                    r1 = k['0'].v.toString().toLowerCase().search(pesquisaCodigo.toString().toLowerCase().trim())
                 }
-                if(cod.trim().length > 0 ){
-                    r2 = k['1'].v.toString().toLowerCase().search(cod.toLowerCase());
+                if(nome.trim().length > 0 ){
+                    r2 = k['1'].v.toString().toLowerCase().search(nome)
                 }
             
                 return ((r1 > -1) || (r2 > -1));
             });
 
-    
            criarTabelaHTML(filtro2);
-      
+           carregando.style = "display: none;";
             
+        }
+    ).catch(
+        value => {
+            let divResultados = document.getElementById("resultados");
+            divResultados.textContent = '';
+            divResultados.textContent = "Erro";
+            carregando.style = "display: none;";
         }
     )
 }
 function criarTabelaHTML(dados) {
-
     let divResultados = document.getElementById("resultados");
     divResultados.textContent = '';
     if (dados.length > 0){
@@ -83,6 +104,22 @@ function criarTabelaHTML(dados) {
     
 }
 
+function inserirAtualizacao(){
+    let data = document.getElementById("data_atualizacao");
+
+    obterDados(urlmeta).then(
+        value => {
+            let tabela = value.table.rows;
+            data.innerHTML = (tabela['1']['c'][0].v);
+        }
+    ).catch(
+        value => {
+           
+            data.innerHTML = "2024";
+        }
+    )
+    }
+
 function login() {
 
     let bloco_login = document.getElementById("id_bloco_login");
@@ -105,6 +142,7 @@ function login() {
         sessionStorage.setItem("usuario", USUARIO);
         sessionStorage.setItem("senha", SENHA);
         inserirPesquisa();
+        inserirAtualizacao();
 
     }else {
        let acesso = document.getElementById("acesso");
@@ -114,13 +152,14 @@ function login() {
 
 }
 
+
 function inserirPesquisa() {
 
+    let pesquisaBotao = document.getElementById("pesquisa");
     let pesquisaCodigo = document.getElementById("codigo");
     let pesquisaNome = document.getElementById("produto");
-    let pesquisaBotao = document.getElementById("pesquisa");
     pesquisaBotao.addEventListener("click", function () {
-        pesquisar(pesquisaCodigo.value.toString(),pesquisaNome.value.toString());
+        pesquisar(pesquisaNome.value,pesquisaCodigo.value);
     })
 }
 
